@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Farny • Viral Universe</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:Poppins,sans-serif;}
+
+body{
+background:#050816;
+color:white;
+overflow:hidden;
+}
+
+canvas{
+position:fixed;
+inset:0;
+z-index:-2;
+}
+
+.overlay{
+position:fixed;
+inset:0;
+background:radial-gradient(circle,rgba(168,85,247,0.25),transparent 60%);
+z-index:-1;
+transition:.5s;
+}
+
+.card{
+background:rgba(255,255,255,0.08);
+backdrop-filter:blur(18px);
+padding:20px;
+border-radius:20px;
+max-width:800px;
+margin:auto;
+text-align:center;
+box-shadow:0 0 50px rgba(255,255,255,0.1);
+}
+
+.section{
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:20px;
+text-align:center;
+}
+
+button{
+padding:12px 25px;
+border:none;
+border-radius:999px;
+background:linear-gradient(45deg,#ff4d8d,#a855f7);
+color:white;
+cursor:pointer;
+margin:10px;
+transition:.3s;
+}
+
+button:hover{transform:scale(1.05);}
+
+.hidden{display:none;}
+
+.type{
+white-space:pre-line;
+border-right:2px solid white;
+min-height:100px;
+}
+
+.glitch{
+animation:glitch .3s infinite;
+}
+
+@keyframes glitch{
+0%{transform:translate(0);}
+25%{transform:translate(1px,-1px);}
+50%{transform:translate(-1px,1px);}
+75%{transform:translate(1px,1px);}
+100%{transform:translate(0);}
+}
+
+.heart{
+position:fixed;
+color:#ff4d8d;
+animation:float linear forwards;
+}
+
+@keyframes float{
+0%{transform:translateY(0);opacity:1;}
+100%{transform:translateY(-120vh);opacity:0;}
+}
+
+/* DEVIL MODE */
+body.devil{
+background:black;
+filter:contrast(1.2) saturate(1.5);
+}
+
+body.devil .overlay{
+background:radial-gradient(circle,rgba(255,0,0,0.25),transparent 60%);
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="stars"></canvas>
+<div class="overlay"></div>
+
+<!-- VIRAL START -->
+<section class="section" id="start">
+<div class="card">
+<h1 id="title">⚠ SYSTEM DETECTED AN ANOMALY ⚠</h1>
+<p>Something special is trying to load...</p>
+
+<button onclick="enter()">ENTER UNIVERSE</button>
+<button onclick="toggleDevil()">😈 DEVIL MODE</button>
+</div>
+</section>
+
+<!-- STORY -->
+<section class="section hidden" id="story">
+<div class="card">
+<p id="text" class="type"></p>
+
+<div id="choices" class="hidden">
+<button onclick="choice(1)">She is special</button>
+<button onclick="choice(2)">She is everything</button>
+<button onclick="choice(3)">She is Farny ❤️</button>
+</div>
+</div>
+</section>
+
+<!-- CHAT SIM -->
+<section class="section hidden" id="chat">
+<div class="card">
+<h2>💬 LIVE MESSAGE</h2>
+<p id="chatText" class="type"></p>
+<button onclick="gift()">Open Gift 🎁</button>
+</div>
+</section>
+
+<!-- FINAL -->
+<section class="section hidden" id="final">
+<div class="card">
+<h1>🎂 HAPPY BIRTHDAY FARNY 🎂</h1>
+<p id="finalText" class="type"></p>
+<h2>— Zero ❤️</h2>
+</div>
+</section>
+
+<audio id="music" loop>
+<source src="YOUR_MP3.mp3">
+</audio>
+
+<button onclick="music()" style="position:fixed;top:10px;right:10px;z-index:999">🎵</button>
+
+<script>
+
+/* STAR BACKGROUND */
+const c=document.getElementById("stars");
+const x=c.getContext("2d");
+c.width=innerWidth;
+c.height=innerHeight;
+
+let stars=[];
+for(let i=0;i<200;i++){
+stars.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2});
+}
+
+function draw(){
+x.clearRect(0,0,c.width,c.height);
+x.fillStyle="white";
+stars.forEach(s=>{
+x.beginPath();
+x.arc(s.x,s.y,s.r,0,Math.PI*2);
+x.fill();
+s.y+=0.2;
+if(s.y>c.height)s.y=0;
+});
+requestAnimationFrame(draw);
+}
+draw();
+
+/* TYPE */
+function type(el,text,cb){
+let i=0;
+let t=setInterval(()=>{
+el.textContent+=text[i];
+i++;
+if(i>=text.length){
+clearInterval(t);
+if(cb)cb();
+}
+},20);
+}
+
+/* START */
+function enter(){
+start.classList.add("hidden");
+story.classList.remove("hidden");
+
+type(text,
+"Booting emotional system...\n\nTarget: Farny\nStatus: Unexplainable importance detected.\n\nGenerating universe around subject...",
+()=>choices.classList.remove("hidden")
+);
+}
+
+/* CHOICES */
+function choice(n){
+story.classList.add("hidden");
+chat.classList.remove("hidden");
+
+let msg=[
+"She changed everything without trying.",
+"She became a universe without knowing.",
+"She is not just a name... she is the reason."
+];
+
+type(chatText,msg[n-1]);
+}
+
+/* GIFT */
+function gift(){
+chat.classList.add("hidden");
+final.classList.remove("hidden");
+
+for(let i=0;i<120;i++){
+let h=document.createElement("div");
+h.className="heart";
+h.innerHTML="❤️";
+h.style.left=Math.random()*100+"vw";
+h.style.animationDuration=(3+Math.random()*5)+"s";
+document.body.appendChild(h);
+setTimeout(()=>h.remove(),8000);
+}
+
+type(finalText,
+"Farny,\n\nThis is not a normal birthday message.\nThis is a system confession.\n\nYou are the reason this universe exists in code.\n\nHappy Birthday ❤️\n\n— Zero"
+);
+}
+
+/* MUSIC */
+function music(){
+document.getElementById("music").play();
+}
+
+/* DEVIL MODE */
+function toggleDevil(){
+document.body.classList.toggle("devil");
+document.getElementById("title").classList.toggle("glitch");
+}
+
+</script>
+
+</body>
+</html>
